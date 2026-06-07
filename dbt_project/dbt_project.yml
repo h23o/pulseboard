@@ -1,0 +1,33 @@
+name: pulseboard
+version: "1.0.0"
+config-version: 2
+
+profile: pulseboard
+
+# Paths
+model-paths:      ["models"]
+analysis-paths:   ["analyses"]
+test-paths:       ["tests"]
+seed-paths:       ["seeds"]
+macro-paths:      ["macros"]
+snapshot-paths:   ["snapshots"]
+
+target-path:  "target"
+clean-targets: ["target", "dbt_packages"]
+
+# ── Model materialisation defaults ──────────────────────────────────────────
+models:
+  pulseboard:
+    staging:
+      +materialized: view
+      +schema: staging
+
+    intermediate:
+      +materialized: ephemeral
+
+    marts:
+      +materialized: table
+      +schema: marts
+
+# Note: source freshness thresholds are configured in
+# models/staging/stg_ae_attendances.yml under the sources: block.

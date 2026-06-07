@@ -1,0 +1,90 @@
+version: 2
+
+sources:
+  - name: raw_data
+    description: "Raw NHS A&E attendance data loaded by the Python ingestion pipeline."
+    schema: raw
+    tables:
+      - name: ae_attendances
+        description: >
+          Append-only landing table for NHS A&E monthly attendance CSVs.
+          Each row represents one trust's statistics for one calendar month.
+        loaded_at_field: _ingested_at
+        freshness:
+          warn_after:  { count: 35, period: day }
+          error_after: { count: 90, period: day }
+        columns:
+          - name: _ingested_at
+            description: "UTC timestamp when the row was inserted by the pipeline."
+          - name: _source_file
+            description: "Filename of the CSV that produced this row (idempotency key)."
+          - name: period
+            description: "Raw period string from the source CSV (e.g. 'MSitAE-MARCH-2026')."
+          - name: org_code
+            description: "ODS organisation code for the trust."
+          - name: org_name
+            description: "Trust display name as it appeared in the source file."
+          - name: type1_att
+            description: "Type 1 (Major A&E) total attendances – raw TEXT."
+          - name: type1_4hr
+            description: "Type 1 attendances within 4 hours – raw TEXT."
+          - name: type2_att
+            description: "Type 2 (Single-specialty A&E) total attendances – raw TEXT."
+          - name: type2_4hr
+            description: "Type 2 attendances within 4 hours – raw TEXT."
+          - name: other_att
+            description: "Other A&E departments total attendances – raw TEXT."
+          - name: other_4hr
+            description: "Other A&E attendances within 4 hours – raw TEXT."
+
+models:
+  - name: stg_ae_attendances
+    description: >
+      Cleaned and typed view over raw.ae_attendances.
+      One row per trust per calendar month.
+      Null markers ('-', blanks) are converted to SQL NULL.
+      Period strings are parsed to the first day of the month (DATE).
+    columns:
+      - name: month_date
+        description: "First day of the reporting month (e.g. 2026-03-01)."
+        tests:
+          - not_null
+
+      - name: org_code
+        description: "Upper-cased ODS organisation code."
+        tests:
+          - not_null
+
+      - name: trust_name
+        description: "INITCAP trust display name."
+
+      - name: type1_attendances
+        description: "Type 1 (Major A&E) total attendances for the month."
+
+      - name: type1_within_4hr
+        description: "Type 1 attendances seen within the 4-hour standard."
+
+      - name: type2_attendances
+        description: "Type 2 (Single-specialty) total attendances."
+
+      - name: type2_within_4hr
+        description: "Type 2 attendances within 4 hours."
+
+      - name: other_attendances
+        description: "Other A&E department total attendances."
+
+      - name: other_within_4hr
+        description: "Other A&E attendances within 4 hours."
+
+      - name: _source_file
+        description: "Source CSV filename for lineage tracing."
+
+      - name: _ingested_at
+        description: "Timestamp of ingestion for audit purposes."
+
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - month_date
+              - org_code

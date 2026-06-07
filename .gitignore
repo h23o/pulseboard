@@ -1,0 +1,52 @@
+# ── Secrets & config ────────────────────────────────────────────────────────
+.env
+*.env
+
+# ── Downloaded NHS data ──────────────────────────────────────────────────────
+data/raw/*.csv
+data/raw/*.xls
+data/raw/*.xlsx
+
+# ── Python ───────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+env/
+
+# ── dbt ──────────────────────────────────────────────────────────────────────
+dbt_project/target/
+dbt_project/dbt_packages/
+dbt_project/logs/
+
+# ── Node / Next.js ───────────────────────────────────────────────────────────
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/.env.local
+frontend/.env.production
+
+# ── Docker ───────────────────────────────────────────────────────────────────
+# Volume data is managed by Docker, not tracked in git
+docker/postgres-data/
+
+# ── OS & editor ──────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.idea/
+.vscode/
+*.iml
+dbt_project/.user.yml
