@@ -179,8 +179,12 @@ pulseboard/
 
 ## Screenshots
 
-> Add screenshots after running `npm run dev` at `http://localhost:3000`.
-> Suggested captures: national KPI row, 36-month trend chart, trust detail page.
+<img width="1857" height="919" alt="image" src="https://github.com/user-attachments/assets/61e75fd0-39e1-4b85-9d24-149b7cbc547f" />
+<img width="1343" height="794" alt="image" src="https://github.com/user-attachments/assets/185fe04a-e8b2-4281-a168-b7a32ac5ec2d" />
+<img width="1291" height="659" alt="image" src="https://github.com/user-attachments/assets/a827a4d0-38ee-442d-861a-733a73adb3e4" />
+<img width="1342" height="796" alt="image" src="https://github.com/user-attachments/assets/5e46d89c-5edf-4b22-bed2-e59f476a281d" />
+
+
 
 ---
 
